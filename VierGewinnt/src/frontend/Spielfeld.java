@@ -6,8 +6,9 @@ import javax.swing.JPanel;
 
 public class Spielfeld extends JPanel
 {
-    
-    private Feld[][] felder=new Feld[7][6];
+
+	private static final long serialVersionUID = 1L;
+	private Feld[][] felder=new Feld[7][6];
     private GridBagLayout gbl=new GridBagLayout();
     private GridBagConstraints gbc = new GridBagConstraints();
     

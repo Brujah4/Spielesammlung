@@ -7,8 +7,8 @@ import javax.swing.JPanel;
 
 public class Hauptfenster extends JFrame
 {
-    
-    private JPanel contentPane = (JPanel) getContentPane();
+	private static final long serialVersionUID = 1L;
+	private JPanel contentPane = (JPanel) getContentPane();
     
     public Hauptfenster()
     {
@@ -23,6 +23,7 @@ public class Hauptfenster extends JFrame
         frame.setSize(new Dimension(449, 410));
         frame.setTitle("Vier Gewinnt");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setResizable(false);
         frame.setVisible(true);
     }
 }
