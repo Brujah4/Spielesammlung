@@ -2,16 +2,19 @@ package frontend;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 
 import backend.BasicToken;
 
@@ -23,15 +26,23 @@ public class Board extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private static final int FIELDSIZE = 8;
-	private static final Dimension MINSIZE = new Dimension(500, 500);
+	private static final Dimension PREFERREDSIZE = new Dimension(500, 500);
 	protected final Image DRAUGHTSBLACK = new ImageIcon(getClass().getResource("../images/draughts_black.jpg")).getImage();
 	protected final Image DRAUGHTSWHITE = new ImageIcon(getClass().getResource("../images/draughts_white.jpg")).getImage();
 	
 	private JPanel playPanel;
 	private Field[][] playfield = new Field[FIELDSIZE][FIELDSIZE];
+	
 	private JPanel buttonPanel;
 	private JButton startButton;
 	private JButton resetButton;
+	
+	private JPanel optionPanel;
+	private JLabel gameLabel;
+	private JPanel gamePanel;
+	private ButtonGroup gameGroup;
+	private JRadioButton draughtsButton;
+	private JRadioButton chessButton;
 	
 	public FieldListener fl = new FieldListener();
 	public ButtonListener bl = new ButtonListener();
@@ -39,12 +50,12 @@ public class Board extends JFrame {
 	public Board() {
 		frameInit();
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
-		setMinimumSize(MINSIZE);
 		setResizable(false);
 		setTitle("Dame");
 		setLayout(new BorderLayout());
 		
 		playPanel = new JPanel(new GridLayout(FIELDSIZE, FIELDSIZE));
+		playPanel.setPreferredSize(PREFERREDSIZE);
 		
 		boolean black = false;
 		
@@ -59,7 +70,7 @@ public class Board extends JFrame {
 			black = !black;
 		}
 		
-		buttonPanel = new JPanel(new GridLayout(0, 6));
+		buttonPanel = new JPanel(new GridLayout(1, 6));
 		startButton = new JButton("Start");
 		startButton.addActionListener(bl);
 		resetButton = new JButton("Reset");
@@ -67,12 +78,26 @@ public class Board extends JFrame {
 		buttonPanel.add(new JLabel());
 		buttonPanel.add(startButton);
 		buttonPanel.add(new JLabel());
-		buttonPanel.add(new JLabel());
 		buttonPanel.add(resetButton);
 		buttonPanel.add(new JLabel());
+		buttonPanel.add(new JLabel());
+		
+		optionPanel = new JPanel(new GridLayout(8, 1));
+		gameLabel = new JLabel("Spiel", JLabel.CENTER);
+		gamePanel = new JPanel(new FlowLayout());
+		draughtsButton = new JRadioButton("Dame");
+		chessButton = new JRadioButton("Schach");
+		gameGroup = new ButtonGroup();
+		gameGroup.add(draughtsButton);
+		gameGroup.add(chessButton);
+		gamePanel.add(draughtsButton);
+		gamePanel.add(chessButton);
+		optionPanel.add(gameLabel);
+		optionPanel.add(gamePanel);
 		
 		getContentPane().add(playPanel, BorderLayout.CENTER);
 		getContentPane().add(buttonPanel, BorderLayout.SOUTH);
+		getContentPane().add(optionPanel, BorderLayout.EAST);
 		pack();
 	}
 	
