@@ -6,7 +6,9 @@ import java.awt.GridLayout;
 import java.awt.Image;
 
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import backend.BasicToken;
@@ -22,6 +24,9 @@ public class Board extends JFrame {
 	
 	private JPanel playPanel;
 	private Field[][] playfield = new Field[FIELDSIZE][FIELDSIZE];
+	private JPanel buttonPanel;
+	private JButton startButton;
+	private JButton resetButton;
 	
 	public Board() {
 		frameInit();
@@ -54,9 +59,19 @@ public class Board extends JFrame {
 			black = !black;
 		}
 		
+		buttonPanel = new JPanel(new GridLayout(0, 6));
+		startButton = new JButton("Start");
+		resetButton = new JButton("Reset");
+		buttonPanel.add(new JLabel());
+		buttonPanel.add(startButton);
+		buttonPanel.add(new JLabel());
+		buttonPanel.add(new JLabel());
+		buttonPanel.add(resetButton);
+		buttonPanel.add(new JLabel());
+		
 		getContentPane().add(playPanel, BorderLayout.CENTER);
+		getContentPane().add(buttonPanel, BorderLayout.SOUTH);
 		pack();
-		initPlayfield();
 	}
 	
 	public void initPlayfield() {
