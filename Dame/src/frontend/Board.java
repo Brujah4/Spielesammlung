@@ -4,6 +4,8 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.Image;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -28,6 +30,9 @@ public class Board extends JFrame {
 	private JButton startButton;
 	private JButton resetButton;
 	
+	public FieldListener fl = new FieldListener();
+	public ButtonListener bl = new ButtonListener();
+	
 	public Board() {
 		frameInit();
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -43,6 +48,7 @@ public class Board extends JFrame {
 		for(int row=0 ; row<playfield.length ; row++) {
 			for(int column=0 ; column<playfield[row].length ; column++) {
 				Field field = new Field(this, black);
+				field.addActionListener(fl);
 				
 				if (black) {
 					if (row < 3) {
@@ -61,7 +67,9 @@ public class Board extends JFrame {
 		
 		buttonPanel = new JPanel(new GridLayout(0, 6));
 		startButton = new JButton("Start");
+		startButton.addActionListener(bl);
 		resetButton = new JButton("Reset");
+		resetButton.addActionListener(bl);
 		buttonPanel.add(new JLabel());
 		buttonPanel.add(startButton);
 		buttonPanel.add(new JLabel());
@@ -74,7 +82,7 @@ public class Board extends JFrame {
 		pack();
 	}
 	
-	public void initPlayfield() {
+	private void initPlayfield() {
 		Field field;
 		Token token;
 		
@@ -93,6 +101,20 @@ public class Board extends JFrame {
 					}
 				}
 			}
+		}
+	}
+	
+	private class FieldListener implements ActionListener {
+
+		public void actionPerformed(ActionEvent ae) {
+			System.out.println("Klick!");
+		}
+	}
+	
+	private class ButtonListener implements ActionListener {
+
+		public void actionPerformed(ActionEvent ae) {
+			System.out.println("Klick Button!");
 		}
 	}
 }
