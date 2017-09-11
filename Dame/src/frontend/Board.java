@@ -23,12 +23,18 @@ public class Board extends JFrame {
 	private enum Game {
 		DRAUGHTS, CHESS
 	}
+	
+	private enum Color {
+		WHITE, BLACK
+	}
 
 	private static final long serialVersionUID = 1L;
 	private static final int FIELDSIZE = 8;
 	private static final Dimension PREFERREDSIZE = new Dimension(500, 500);
 	protected final Image DRAUGHTSBLACK = new ImageIcon(getClass().getResource("../images/draughts_black.jpg")).getImage();
 	protected final Image DRAUGHTSWHITE = new ImageIcon(getClass().getResource("../images/draughts_white.jpg")).getImage();
+	
+	private boolean isRunning;
 	
 	private JPanel playPanel;
 	private Field[][] playfield = new Field[FIELDSIZE][FIELDSIZE];
@@ -43,6 +49,11 @@ public class Board extends JFrame {
 	private ButtonGroup gameGroup;
 	private JRadioButton draughtsButton;
 	private JRadioButton chessButton;
+	private JLabel colorLabel;
+	private JPanel colorPanel;
+	private ButtonGroup colorGroup;
+	private JRadioButton whiteButton;
+	private JRadioButton blackButton;
 	
 	public FieldListener fl = new FieldListener();
 	public ButtonListener bl = new ButtonListener();
@@ -53,6 +64,8 @@ public class Board extends JFrame {
 		setResizable(false);
 		setTitle("Dame");
 		setLayout(new BorderLayout());
+		
+		isRunning = false;
 		
 		playPanel = new JPanel(new GridLayout(FIELDSIZE, FIELDSIZE));
 		playPanel.setPreferredSize(PREFERREDSIZE);
@@ -82,7 +95,8 @@ public class Board extends JFrame {
 		buttonPanel.add(new JLabel());
 		buttonPanel.add(new JLabel());
 		
-		optionPanel = new JPanel(new GridLayout(8, 1));
+		optionPanel = new JPanel(new GridLayout(4, 1));
+		
 		gameLabel = new JLabel("Spiel", JLabel.CENTER);
 		gamePanel = new JPanel(new FlowLayout());
 		draughtsButton = new JRadioButton("Dame");
@@ -92,8 +106,21 @@ public class Board extends JFrame {
 		gameGroup.add(chessButton);
 		gamePanel.add(draughtsButton);
 		gamePanel.add(chessButton);
+		
+		colorLabel = new JLabel("Farbe", JLabel.CENTER);
+		colorPanel = new JPanel(new FlowLayout());
+		whiteButton = new JRadioButton("weiﬂ");
+		blackButton = new JRadioButton("schwarz");
+		colorGroup = new ButtonGroup();
+		colorGroup.add(whiteButton);
+		colorGroup.add(blackButton);
+		colorPanel.add(whiteButton);
+		colorPanel.add(blackButton);
+		
 		optionPanel.add(gameLabel);
 		optionPanel.add(gamePanel);
+		optionPanel.add(colorLabel);
+		optionPanel.add(colorPanel);
 		
 		getContentPane().add(playPanel, BorderLayout.CENTER);
 		getContentPane().add(buttonPanel, BorderLayout.SOUTH);
@@ -101,8 +128,15 @@ public class Board extends JFrame {
 		pack();
 	}
 	
-	private void initPlayfield(Game game) {
+	private void initPlayfield(Game game, Color color) {
 		Field field;
+		boolean isWhite;
+		
+		if (color == Color.WHITE) {
+			isWhite = true;
+		} else {
+			isWhite = false;
+		}
 		
 		switch (game) {
 			case DRAUGHTS:
@@ -111,7 +145,7 @@ public class Board extends JFrame {
 						field = playfield[row][column];
 						
 						if (field.isBlack()) {
-							field.setToken(new BasicToken(field, true));
+							field.setToken(new BasicToken(field, isWhite));
 						}
 					}
 				}
@@ -121,10 +155,11 @@ public class Board extends JFrame {
 						field = playfield[row][column];
 						
 						if (field.isBlack()) {
-							field.setToken(new BasicToken(field, false));
+							field.setToken(new BasicToken(field, !isWhite));
 						}
 					}
 				}
+				isRunning = true;
 				break;
 			
 			case CHESS:
@@ -152,13 +187,26 @@ public class Board extends JFrame {
 
 		public void actionPerformed(ActionEvent ae) {
 			if (ae.getSource() == startButton) {
-				initPlayfield(Game.DRAUGHTS);
+				if (draughtsButton.isSelected()) {
+					if (whiteButton.isSelected()) {
+						initPlayfield(Game.DRAUGHTS, Color.WHITE);
+					} else if (blackButton.isSelected()) {
+						initPlayfield(Game.DRAUGHTS, Color.BLACK);
+					}
+				} else if (chessButton.isSelected()) {
+					if (whiteButton.isSelected()) {
+						initPlayfield(Game.CHESS, Color.WHITE);
+					} else if (blackButton.isSelected()) {
+						initPlayfield(Game.CHESS, Color.BLACK);
+					}
+				}
 			} else if (ae.getSource() == resetButton) {
 				for(int row=0 ; row<playfield.length ; row++) {
 					for(int column=0 ; column<playfield[row].length ; column++) {
 						playfield[row][column].reset();
 					}
 				}
+				isRunning = false;
 			}
 		}
 	}
