@@ -116,7 +116,7 @@ public class Board extends JFrame {
 			for(int row=0 ; row<playfield.length ; row++) {
 				for(int column=0 ; column<playfield[row].length ; column++) {
 					if (ae.getSource() == playfield[row][column]) {
-						System.out.println("Klick auf Feld " + row + ", " + column + " !!");
+						System.out.println("Klick auf Feld (" + row + "," + column + ") !!");
 					}
 				}
 			}
