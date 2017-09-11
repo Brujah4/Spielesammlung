@@ -113,7 +113,13 @@ public class Board extends JFrame {
 	private class FieldListener implements ActionListener {
 
 		public void actionPerformed(ActionEvent ae) {
-			System.out.println("Klick!");
+			for(int row=0 ; row<playfield.length ; row++) {
+				for(int column=0 ; column<playfield[row].length ; column++) {
+					if (ae.getSource() == playfield[row][column]) {
+						System.out.println("Klick auf Feld " + row + ", " + column + " !!");
+					}
+				}
+			}
 		}
 	}
 	
