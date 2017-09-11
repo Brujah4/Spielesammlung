@@ -1,3 +1,7 @@
+// ToDo
+// button für initPlayfield()
+// draughtsblack -> basicTokenBlack
+
 package backend;
 
 import frontend.Board;
