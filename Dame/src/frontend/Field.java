@@ -33,4 +33,8 @@ public class Field extends JButton {
 	public void setToken(Token token) {
 		this.token = token;
 	}
+	
+	public boolean isBlack() {
+		return isBlack;
+	}
 }

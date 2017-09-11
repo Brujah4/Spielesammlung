@@ -14,9 +14,12 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import backend.BasicToken;
-import backend.Token;
 
 public class Board extends JFrame {
+	
+	private enum Game {
+		DRAUGHTS, CHESS
+	}
 
 	private static final long serialVersionUID = 1L;
 	private static final int FIELDSIZE = 8;
@@ -49,15 +52,6 @@ public class Board extends JFrame {
 			for(int column=0 ; column<playfield[row].length ; column++) {
 				Field field = new Field(this, black);
 				field.addActionListener(fl);
-				
-				if (black) {
-					if (row < 3) {
-						field.setToken(new BasicToken(field, true));
-					} else if (row > 4) {
-						field.setToken(new BasicToken(field, false));
-					}
-				}
-				
 				playfield[row][column] = field;
 				playPanel.add(field);
 				black = !black;
@@ -82,25 +76,41 @@ public class Board extends JFrame {
 		pack();
 	}
 	
-	private void initPlayfield() {
+	private void initPlayfield(Game game) {
 		Field field;
-		Token token;
 		
-		for(int row=0 ; row<playfield.length ; row++) {
-			for(int column=0 ; column<playfield[row].length ; column++) {
-				field = playfield[row][column];
-				token = field.getToken();
-				
-				if (token != null) {
-					if (token.isBlack()) {
-						ImageIcon icon = new ImageIcon(DRAUGHTSBLACK.getScaledInstance(field.getWidth(), field.getHeight(), Image.SCALE_FAST));
-						field.setIcon(icon);
-					} else {
-						ImageIcon icon = new ImageIcon(DRAUGHTSWHITE.getScaledInstance(field.getWidth(), field.getHeight(), Image.SCALE_FAST));
-						field.setIcon(icon);
+		switch (game) {
+			case DRAUGHTS:
+				for(int row=0 ; row<3 ; row++) {
+					for(int column=0 ; column<playfield[row].length ; column++) {
+						field = playfield[row][column];
+						
+						if (field.isBlack()) {
+							field.setToken(new BasicToken(field, true));
+							ImageIcon icon = new ImageIcon(DRAUGHTSBLACK.getScaledInstance(field.getWidth(), field.getHeight(), Image.SCALE_FAST));
+							field.setIcon(icon);
+						}
 					}
 				}
-			}
+				
+				for(int row=5 ; row<playfield.length ; row++) {
+					for(int column=0 ; column<playfield[row].length ; column++) {
+						field = playfield[row][column];
+						
+						if (field.isBlack()) {
+							field.setToken(new BasicToken(field, false));
+							ImageIcon icon = new ImageIcon(DRAUGHTSWHITE.getScaledInstance(field.getWidth(), field.getHeight(), Image.SCALE_FAST));
+							field.setIcon(icon);
+						}
+					}
+				}
+				break;
+			
+			case CHESS:
+				break;
+			
+			default:
+				break;
 		}
 	}
 	
@@ -114,7 +124,9 @@ public class Board extends JFrame {
 	private class ButtonListener implements ActionListener {
 
 		public void actionPerformed(ActionEvent ae) {
-			System.out.println("Klick Button!");
+			if (ae.getSource() == startButton) {
+				initPlayfield(Game.DRAUGHTS);
+			}
 		}
 	}
 }
