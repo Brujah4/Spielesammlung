@@ -1,9 +1,12 @@
 package frontend;
 
 import java.awt.Color;
+import java.awt.Image;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 
+import backend.BasicToken;
 import backend.Token;
 
 public class Field extends JButton {
@@ -26,15 +29,35 @@ public class Field extends JButton {
 		return board;
 	}
 	
-	public Token getToken() {
+	protected Token getToken() {
 		return token;
 	}
 	
-	public void setToken(Token token) {
+	protected void setToken(Token token) {
+		if (token == null) {
+			System.out.println("FEHLER: Nullpointer Token gesetzt!");
+			return;
+		}
+		
 		this.token = token;
+		
+		if (token instanceof BasicToken) {
+			if (token.isBlack()) {
+				ImageIcon icon = new ImageIcon(board.DRAUGHTSBLACK.getScaledInstance(getWidth(), getHeight(), Image.SCALE_FAST));
+				this.setIcon(icon);
+			} else {
+				ImageIcon icon = new ImageIcon(board.DRAUGHTSWHITE.getScaledInstance(getWidth(), getHeight(), Image.SCALE_FAST));
+				this.setIcon(icon);
+			}
+		}
 	}
 	
-	public boolean isBlack() {
+	protected boolean isBlack() {
 		return isBlack;
+	}
+	
+	protected void reset() {
+		token = null;
+		setIcon(null);
 	}
 }

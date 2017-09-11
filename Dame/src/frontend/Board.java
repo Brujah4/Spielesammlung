@@ -24,8 +24,8 @@ public class Board extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private static final int FIELDSIZE = 8;
 	private static final Dimension MINSIZE = new Dimension(500, 500);
-	private final Image DRAUGHTSBLACK = new ImageIcon(getClass().getResource("../images/draughts_black.jpg")).getImage();
-	private final Image DRAUGHTSWHITE = new ImageIcon(getClass().getResource("../images/draughts_white.jpg")).getImage();
+	protected final Image DRAUGHTSBLACK = new ImageIcon(getClass().getResource("../images/draughts_black.jpg")).getImage();
+	protected final Image DRAUGHTSWHITE = new ImageIcon(getClass().getResource("../images/draughts_white.jpg")).getImage();
 	
 	private JPanel playPanel;
 	private Field[][] playfield = new Field[FIELDSIZE][FIELDSIZE];
@@ -87,8 +87,6 @@ public class Board extends JFrame {
 						
 						if (field.isBlack()) {
 							field.setToken(new BasicToken(field, true));
-							ImageIcon icon = new ImageIcon(DRAUGHTSBLACK.getScaledInstance(field.getWidth(), field.getHeight(), Image.SCALE_FAST));
-							field.setIcon(icon);
 						}
 					}
 				}
@@ -99,8 +97,6 @@ public class Board extends JFrame {
 						
 						if (field.isBlack()) {
 							field.setToken(new BasicToken(field, false));
-							ImageIcon icon = new ImageIcon(DRAUGHTSWHITE.getScaledInstance(field.getWidth(), field.getHeight(), Image.SCALE_FAST));
-							field.setIcon(icon);
 						}
 					}
 				}
@@ -126,6 +122,12 @@ public class Board extends JFrame {
 		public void actionPerformed(ActionEvent ae) {
 			if (ae.getSource() == startButton) {
 				initPlayfield(Game.DRAUGHTS);
+			} else if (ae.getSource() == resetButton) {
+				for(int row=0 ; row<playfield.length ; row++) {
+					for(int column=0 ; column<playfield[row].length ; column++) {
+						playfield[row][column].reset();
+					}
+				}
 			}
 		}
 	}
