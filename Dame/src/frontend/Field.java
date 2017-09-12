@@ -7,6 +7,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 
 import backend.BasicToken;
+import backend.Rules;
 import backend.Token;
 
 public class Field extends JButton {
@@ -60,7 +61,7 @@ public class Field extends JButton {
 	public void setTokenOnValidField(Token inputToken) {
 		switch (board.getGame()) {
 			case DRAUGHTS:
-				if (token == null && inputToken.getField() != this) {
+				if (Rules.validDraughts(this, inputToken)) {
 					setToken(inputToken);
 					token.setField(this);
 					board.moveFinished();
