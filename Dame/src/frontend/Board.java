@@ -17,6 +17,7 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 
 import backend.BasicToken;
+import backend.Token;
 
 public class Board extends JFrame {
 	
@@ -34,7 +35,8 @@ public class Board extends JFrame {
 	protected final Image DRAUGHTSBLACK = new ImageIcon(getClass().getResource("../images/draughts_black.jpg")).getImage();
 	protected final Image DRAUGHTSWHITE = new ImageIcon(getClass().getResource("../images/draughts_white.jpg")).getImage();
 	
-	private boolean isRunning;
+	private boolean isRunning = false;
+	private boolean moveStart = true;
 	
 	private JPanel playPanel;
 	private Field[][] playfield = new Field[FIELDSIZE][FIELDSIZE];
@@ -128,6 +130,30 @@ public class Board extends JFrame {
 		pack();
 	}
 	
+	public boolean isRunning() {
+		return isRunning;
+	}
+	
+	public void startRunning() {
+		isRunning = true;
+	}
+	
+	public void endRunning() {
+		isRunning = false;
+	}
+	
+	public boolean isMoveStart() {
+		return moveStart;
+	}
+	
+	public void moveStarted() {
+		moveStart = false;
+	}
+	
+	public void moveFinished() {
+		moveStart = true;
+	}
+	
 	private void initPlayfield(Game game, Color color) {
 		Field field;
 		boolean isWhite;
@@ -137,6 +163,8 @@ public class Board extends JFrame {
 		} else {
 			isWhite = false;
 		}
+		
+		finishPlayfield();
 		
 		switch (game) {
 			case DRAUGHTS:
@@ -159,7 +187,7 @@ public class Board extends JFrame {
 						}
 					}
 				}
-				isRunning = true;
+				startRunning();
 				break;
 			
 			case CHESS:
@@ -170,14 +198,43 @@ public class Board extends JFrame {
 		}
 	}
 	
+	private void finishPlayfield() {
+		for(int row=0 ; row<playfield.length ; row++) {
+			for(int column=0 ; column<playfield[row].length ; column++) {
+				playfield[row][column].reset();
+			}
+		}
+		moveFinished();
+		endRunning();
+	}
+	
 	private class FieldListener implements ActionListener {
 
+		public Token token = null;
+		
 		public void actionPerformed(ActionEvent ae) {
+			
+			Field field = null;
+			
 			for(int row=0 ; row<playfield.length ; row++) {
 				for(int column=0 ; column<playfield[row].length ; column++) {
 					if (ae.getSource() == playfield[row][column]) {
 						System.out.println("Klick auf Feld (" + row + "," + column + ") !!");
+						field = playfield[row][column];
+						row = playfield.length;
+						break;
 					}
+				}
+			}
+			
+			if (isRunning()) {
+				if (isMoveStart()) {
+					if (field.getToken() != null) {
+						token = field.getToken();
+						field.removeToken();
+					}
+				} else {
+					field.setTokenOnValidField(token);
 				}
 			}
 		}
@@ -201,12 +258,7 @@ public class Board extends JFrame {
 					}
 				}
 			} else if (ae.getSource() == resetButton) {
-				for(int row=0 ; row<playfield.length ; row++) {
-					for(int column=0 ; column<playfield[row].length ; column++) {
-						playfield[row][column].reset();
-					}
-				}
-				isRunning = false;
+				finishPlayfield();
 			}
 		}
 	}

@@ -29,11 +29,11 @@ public class Field extends JButton {
 		return board;
 	}
 	
-	protected Token getToken() {
+	public Token getToken() {
 		return token;
 	}
 	
-	protected void setToken(Token token) {
+	public void setToken(Token token) {
 		if (token == null) {
 			System.out.println("FEHLER: Nullpointer Token gesetzt!");
 			return;
@@ -52,7 +52,20 @@ public class Field extends JButton {
 		}
 	}
 	
-	protected boolean isBlack() {
+	public void removeToken() {
+		reset();
+		board.moveStarted();
+	}
+	
+	public void setTokenOnValidField(Token inputToken) {
+		if (token == null) {
+			setToken(inputToken);
+			token.setField(this);
+			board.moveFinished();
+		}
+	}
+	
+	public boolean isBlack() {
 		return isBlack;
 	}
 	

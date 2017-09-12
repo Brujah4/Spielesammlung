@@ -16,6 +16,10 @@ public abstract class Token {
 		return field;
 	}
 	
+	public void setField(Field inputField) {
+		field = inputField;
+	}
+	
 	public boolean isBlack() {
 		return isBlack;
 	}
