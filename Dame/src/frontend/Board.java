@@ -48,6 +48,7 @@ public class Board extends JFrame {
 	private JPanel buttonPanel;
 	private JButton startButton;
 	private JButton resetButton;
+	private JLabel turnLabel;
 	
 	private JPanel optionPanel;
 	private JLabel gameLabel;
@@ -94,12 +95,13 @@ public class Board extends JFrame {
 		startButton.addActionListener(bl);
 		resetButton = new JButton("Reset");
 		resetButton.addActionListener(bl);
+		turnLabel = new JLabel();
 		buttonPanel.add(new JLabel());
 		buttonPanel.add(startButton);
 		buttonPanel.add(new JLabel());
 		buttonPanel.add(resetButton);
 		buttonPanel.add(new JLabel());
-		buttonPanel.add(new JLabel());
+		buttonPanel.add(turnLabel);
 		
 		optionPanel = new JPanel(new GridLayout(4, 1));
 		
@@ -139,10 +141,13 @@ public class Board extends JFrame {
 	}
 	
 	public void startRunning() {
+		turnLabel.setText("Zug: \"weiﬂ\"");
 		isRunning = true;
 	}
 	
 	public void endRunning() {
+		resetTurn();
+		moveFinished();
 		isRunning = false;
 	}
 	
@@ -162,8 +167,19 @@ public class Board extends JFrame {
 		return turn;
 	}
 	
+	private void resetTurn() {
+		turn = false;
+		turnLabel.setText("");
+	}
+	
 	protected void nextTurn() {
 		turn = !turn;
+		
+		if (turn) {
+			turnLabel.setText("Zug: \"schwarz\"");
+		} else {
+			turnLabel.setText("Zug: \"weiﬂ\"");
+		}
 	}
 	
 	private void initPlayfield(Game game, Color color) {
@@ -216,7 +232,6 @@ public class Board extends JFrame {
 				playfield[row][column].reset();
 			}
 		}
-		moveFinished();
 		endRunning();
 	}
 	
