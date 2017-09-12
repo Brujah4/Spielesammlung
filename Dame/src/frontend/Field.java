@@ -65,7 +65,7 @@ public class Field extends JButton {
 	public void setTokenOnValidField(Token inputToken) {
 		switch (board.getGame()) {
 			case DRAUGHTS:
-				if (Rules.validDraughts(this, inputToken)) {
+				if (Rules.validDraughts(this, inputToken) == 0) {
 					setToken(inputToken);
 					token.setField(this);
 					board.moveFinished();

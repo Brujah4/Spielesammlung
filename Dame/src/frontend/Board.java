@@ -28,7 +28,7 @@ public class Board extends JFrame {
 		DRAUGHTS, CHESS
 	}
 	
-	private enum Color {
+	public enum Colour {
 		WHITE, BLACK
 	}
 	
@@ -39,7 +39,7 @@ public class Board extends JFrame {
 	protected final Image DRAUGHTSWHITE = new ImageIcon(getClass().getResource("../images/draughts_white.jpg")).getImage();
 	
 	private Game game = null;
-	private Color color = null;
+	private Colour colour = null;
 	private boolean isRunning = false;
 	private boolean moveStart = true;
 	private boolean turn = true; // (turn == false => "weiﬂ" ist am Zug) ; (turn == true => "schwarz" ist am Zug)
@@ -58,9 +58,9 @@ public class Board extends JFrame {
 	private ButtonGroup gameGroup;
 	private JRadioButton draughtsButton;
 	private JRadioButton chessButton;
-	private JLabel colorLabel;
-	private JPanel colorPanel;
-	private ButtonGroup colorGroup;
+	private JLabel colourLabel;
+	private JPanel colourPanel;
+	private ButtonGroup colourGroup;
 	private JRadioButton whiteButton;
 	private JRadioButton blackButton;
 	
@@ -117,20 +117,20 @@ public class Board extends JFrame {
 		gamePanel.add(draughtsButton);
 		gamePanel.add(chessButton);
 		
-		colorLabel = new JLabel("Farbe", JLabel.CENTER);
-		colorPanel = new JPanel(new FlowLayout());
+		colourLabel = new JLabel("Farbe", JLabel.CENTER);
+		colourPanel = new JPanel(new FlowLayout());
 		whiteButton = new JRadioButton("weiﬂ");
 		blackButton = new JRadioButton("schwarz");
-		colorGroup = new ButtonGroup();
-		colorGroup.add(whiteButton);
-		colorGroup.add(blackButton);
-		colorPanel.add(whiteButton);
-		colorPanel.add(blackButton);
+		colourGroup = new ButtonGroup();
+		colourGroup.add(whiteButton);
+		colourGroup.add(blackButton);
+		colourPanel.add(whiteButton);
+		colourPanel.add(blackButton);
 		
 		optionPanel.add(gameLabel);
 		optionPanel.add(gamePanel);
-		optionPanel.add(colorLabel);
-		optionPanel.add(colorPanel);
+		optionPanel.add(colourLabel);
+		optionPanel.add(colourPanel);
 		
 		getContentPane().add(playPanel, BorderLayout.CENTER);
 		getContentPane().add(buttonPanel, BorderLayout.SOUTH);
@@ -146,8 +146,12 @@ public class Board extends JFrame {
 		this.game = game;
 	}
 	
-	private void setColor(Color color) {
-		this.color = color;
+	public Colour getColour() {
+		return colour;
+	}
+	
+	private void setColour(Colour colour) {
+		this.colour = colour;
 	}
 	
 	public boolean isRunning() {
@@ -200,12 +204,12 @@ public class Board extends JFrame {
 		Field field;
 		boolean isWhite;
 		
-		if (game == null || color == null) {
+		if (game == null || colour == null) {
 			System.out.println("Bitte erst alle Optionen ausw‰hlen.");
 			return;
 		}
 		
-		if (color == Color.WHITE) {
+		if (colour == Colour.WHITE) {
 			isWhite = true;
 		} else {
 			isWhite = false;
@@ -321,9 +325,9 @@ public class Board extends JFrame {
 					setGame(Game.CHESS);
 				}
 				if (whiteButton.isSelected()) {
-					setColor(Color.WHITE);
+					setColour(Colour.WHITE);
 				} else if (blackButton.isSelected()) {
-					setColor(Color.BLACK);
+					setColour(Colour.BLACK);
 				}
 				initPlayfield();
 			} else if (ae.getSource() == resetButton) {
