@@ -42,7 +42,7 @@ public class Board extends JFrame {
 	private Color color = null;
 	private boolean isRunning = false;
 	private boolean moveStart = true;
-	private boolean turn = false; // (turn == false => "weiß" ist am Zug) ; (turn == true => "schwarz" ist am Zug)
+	private boolean turn = true; // (turn == false => "weiß" ist am Zug) ; (turn == true => "schwarz" ist am Zug)
 	
 	private JPanel playPanel;
 	private Field[][] playfield = new Field[FIELDSIZE][FIELDSIZE];
@@ -83,7 +83,7 @@ public class Board extends JFrame {
 		
 		for(int row=0 ; row<playfield.length ; row++) {
 			for(int column=0 ; column<playfield[row].length ; column++) {
-				Field field = new Field(this, black);
+				Field field = new Field(this, black, row, column);
 				field.addMouseListener(fl);
 				playfield[row][column] = field;
 				playPanel.add(field);
@@ -155,7 +155,7 @@ public class Board extends JFrame {
 	}
 	
 	public void startRunning() {
-		turnLabel.setText("Zug: \"weiß\"");
+		turnLabel.setText("Zug: \"schwarz\"");
 		isRunning = true;
 	}
 	
@@ -182,7 +182,7 @@ public class Board extends JFrame {
 	}
 	
 	private void resetTurn() {
-		turn = false;
+		turn = true;
 		turnLabel.setText("");
 	}
 	
@@ -266,8 +266,8 @@ public class Board extends JFrame {
 				for(int row=0 ; row<playfield.length ; row++) {
 					for(int column=0 ; column<playfield[row].length ; column++) {
 						if (click.getSource() == playfield[row][column]) {
-							System.out.println("Klick auf Feld (" + row + "," + column + ") !!");
 							field = playfield[row][column];
+							System.out.println("Klick auf Feld (" + field.getPosRow() + "," + field.getPosColumn() + ") !!");
 							row = playfield.length;
 							break;
 						}

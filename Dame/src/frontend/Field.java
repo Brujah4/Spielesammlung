@@ -17,13 +17,17 @@ public class Field extends JButton {
 	private Board board;
 	private Token token = null;
 	private boolean isBlack;
+	private int posRow;
+	private int posColumn;
 	private static final Color LIGHT_BROWN = new Color(227, 197, 140);
 	private static final Color DARK_BROWN = new Color(149, 95, 34);
 	
-	public Field(Board board, boolean black) {
+	public Field(Board board, boolean black, int row, int column) {
 		this.board = board;
 		isBlack = black;
 		setBackground(isBlack ? DARK_BROWN : LIGHT_BROWN);
+		posRow = row;
+		posColumn = column;
 	}
 	
 	public Board getBoard() {
@@ -77,6 +81,14 @@ public class Field extends JButton {
 	
 	public boolean isBlack() {
 		return isBlack;
+	}
+	
+	public int getPosRow() {
+		return posRow;
+	}
+	
+	public int getPosColumn() {
+		return posColumn;
 	}
 	
 	protected void reset() {
