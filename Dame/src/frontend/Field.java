@@ -62,6 +62,7 @@ public class Field extends JButton {
 			setToken(inputToken);
 			token.setField(this);
 			board.moveFinished();
+			board.nextTurn();
 		}
 	}
 	

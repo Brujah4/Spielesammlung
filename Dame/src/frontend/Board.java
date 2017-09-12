@@ -5,8 +5,11 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.Image;
+import java.awt.MouseInfo;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
@@ -20,7 +23,7 @@ import backend.BasicToken;
 import backend.Token;
 
 public class Board extends JFrame {
-	
+
 	private enum Game {
 		DRAUGHTS, CHESS
 	}
@@ -28,7 +31,7 @@ public class Board extends JFrame {
 	private enum Color {
 		WHITE, BLACK
 	}
-
+	
 	private static final long serialVersionUID = 1L;
 	private static final int FIELDSIZE = 8;
 	private static final Dimension PREFERREDSIZE = new Dimension(500, 500);
@@ -37,6 +40,7 @@ public class Board extends JFrame {
 	
 	private boolean isRunning = false;
 	private boolean moveStart = true;
+	private boolean turn = false;
 	
 	private JPanel playPanel;
 	private Field[][] playfield = new Field[FIELDSIZE][FIELDSIZE];
@@ -77,7 +81,7 @@ public class Board extends JFrame {
 		for(int row=0 ; row<playfield.length ; row++) {
 			for(int column=0 ; column<playfield[row].length ; column++) {
 				Field field = new Field(this, black);
-				field.addActionListener(fl);
+				field.addMouseListener(fl);
 				playfield[row][column] = field;
 				playPanel.add(field);
 				black = !black;
@@ -154,6 +158,14 @@ public class Board extends JFrame {
 		moveStart = true;
 	}
 	
+	public boolean getTurn() {
+		return turn;
+	}
+	
+	protected void nextTurn() {
+		turn = !turn;
+	}
+	
 	private void initPlayfield(Game game, Color color) {
 		Field field;
 		boolean isWhite;
@@ -208,35 +220,60 @@ public class Board extends JFrame {
 		endRunning();
 	}
 	
-	private class FieldListener implements ActionListener {
+	private class FieldListener implements MouseListener {
 
 		public Token token = null;
 		
-		public void actionPerformed(ActionEvent ae) {
+		public void mouseClicked(MouseEvent click) {
 			
 			Field field = null;
 			
-			for(int row=0 ; row<playfield.length ; row++) {
-				for(int column=0 ; column<playfield[row].length ; column++) {
-					if (ae.getSource() == playfield[row][column]) {
-						System.out.println("Klick auf Feld (" + row + "," + column + ") !!");
-						field = playfield[row][column];
-						row = playfield.length;
-						break;
+			if (click.getButton() == 1) {
+				for(int row=0 ; row<playfield.length ; row++) {
+					for(int column=0 ; column<playfield[row].length ; column++) {
+						if (click.getSource() == playfield[row][column]) {
+							System.out.println("Klick auf Feld (" + row + "," + column + ") !!");
+							field = playfield[row][column];
+							row = playfield.length;
+							break;
+						}
 					}
 				}
+				
+				if (isRunning()) {
+					if (isMoveStart()) {
+						if (field.getToken() != null) {
+							token = field.getToken();
+							if (token.isBlack() == turn) {
+								field.removeToken();
+							}
+						}
+					} else {
+						field.setTokenOnValidField(token);
+					}
+				}
+			} else if (click.getButton() == 3 || MouseInfo.getNumberOfButtons() == 2 && click.getButton() == 2) {
+				if (isRunning() && !isMoveStart()) {
+					token.getField().setToken(token);
+					moveFinished();
+				}
 			}
+		}
+		
+		public void mouseEntered(MouseEvent enter) {
 			
-			if (isRunning()) {
-				if (isMoveStart()) {
-					if (field.getToken() != null) {
-						token = field.getToken();
-						field.removeToken();
-					}
-				} else {
-					field.setTokenOnValidField(token);
-				}
-			}
+		}
+		
+		public void mouseExited(MouseEvent exit) {
+			
+		}
+		
+		public void mousePressed(MouseEvent press) {
+			
+		}
+		
+		public void mouseReleased(MouseEvent release) {
+			
 		}
 	}
 	
