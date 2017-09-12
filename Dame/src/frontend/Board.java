@@ -24,7 +24,7 @@ import backend.Token;
 
 public class Board extends JFrame {
 
-	private enum Game {
+	protected enum Game {
 		DRAUGHTS, CHESS
 	}
 	
@@ -38,9 +38,11 @@ public class Board extends JFrame {
 	protected final Image DRAUGHTSBLACK = new ImageIcon(getClass().getResource("../images/draughts_black.jpg")).getImage();
 	protected final Image DRAUGHTSWHITE = new ImageIcon(getClass().getResource("../images/draughts_white.jpg")).getImage();
 	
+	private Game game = null;
+	private Color color = null;
 	private boolean isRunning = false;
 	private boolean moveStart = true;
-	private boolean turn = false;
+	private boolean turn = false; // (turn == false => "weiß" ist am Zug) ; (turn == true => "schwarz" ist am Zug)
 	
 	private JPanel playPanel;
 	private Field[][] playfield = new Field[FIELDSIZE][FIELDSIZE];
@@ -136,6 +138,18 @@ public class Board extends JFrame {
 		pack();
 	}
 	
+	protected Game getGame() {
+		return game;
+	}
+	
+	private void setGame(Game game) {
+		this.game = game;
+	}
+	
+	private void setColor(Color color) {
+		this.color = color;
+	}
+	
 	public boolean isRunning() {
 		return isRunning;
 	}
@@ -182,9 +196,14 @@ public class Board extends JFrame {
 		}
 	}
 	
-	private void initPlayfield(Game game, Color color) {
+	private void initPlayfield() {
 		Field field;
 		boolean isWhite;
+		
+		if (game == null || color == null) {
+			System.out.println("Bitte erst alle Optionen auswählen.");
+			return;
+		}
 		
 		if (color == Color.WHITE) {
 			isWhite = true;
@@ -297,18 +316,16 @@ public class Board extends JFrame {
 		public void actionPerformed(ActionEvent ae) {
 			if (ae.getSource() == startButton) {
 				if (draughtsButton.isSelected()) {
-					if (whiteButton.isSelected()) {
-						initPlayfield(Game.DRAUGHTS, Color.WHITE);
-					} else if (blackButton.isSelected()) {
-						initPlayfield(Game.DRAUGHTS, Color.BLACK);
-					}
+					setGame(Game.DRAUGHTS);
 				} else if (chessButton.isSelected()) {
-					if (whiteButton.isSelected()) {
-						initPlayfield(Game.CHESS, Color.WHITE);
-					} else if (blackButton.isSelected()) {
-						initPlayfield(Game.CHESS, Color.BLACK);
-					}
+					setGame(Game.CHESS);
 				}
+				if (whiteButton.isSelected()) {
+					setColor(Color.WHITE);
+				} else if (blackButton.isSelected()) {
+					setColor(Color.BLACK);
+				}
+				initPlayfield();
 			} else if (ae.getSource() == resetButton) {
 				finishPlayfield();
 			}

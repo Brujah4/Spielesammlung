@@ -33,13 +33,13 @@ public class Field extends JButton {
 		return token;
 	}
 	
-	public void setToken(Token token) {
-		if (token == null) {
+	public void setToken(Token inputToken) {
+		if (inputToken == null) {
 			System.out.println("FEHLER: Nullpointer Token gesetzt!");
 			return;
 		}
 		
-		this.token = token;
+		token = inputToken;
 		
 		if (token instanceof BasicToken) {
 			if (token.isBlack()) {
@@ -58,11 +58,19 @@ public class Field extends JButton {
 	}
 	
 	public void setTokenOnValidField(Token inputToken) {
-		if (token == null) {
-			setToken(inputToken);
-			token.setField(this);
-			board.moveFinished();
-			board.nextTurn();
+		switch (board.getGame()) {
+			case DRAUGHTS:
+				if (token == null) {
+					setToken(inputToken);
+					token.setField(this);
+					board.moveFinished();
+					board.nextTurn();
+				}
+				break;
+			case CHESS:
+				break;
+			default:
+				break;
 		}
 	}
 	
