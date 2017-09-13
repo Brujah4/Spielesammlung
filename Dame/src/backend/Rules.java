@@ -104,6 +104,10 @@ public class Rules {
 		
 		try {
 			field0 = token.getField().getBoard().getPlayfield()[posRow][posColumn0];
+		} catch (Exception e) {
+			
+		}
+		try {
 			field1 = token.getField().getBoard().getPlayfield()[posRow][posColumn1];
 		} catch (Exception e) {
 			
