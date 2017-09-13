@@ -43,6 +43,7 @@ public class Board extends JFrame {
 	private boolean isRunning = false;
 	private boolean moveStart = true;
 	private boolean turn = true; // (turn == false => "weiﬂ" ist am Zug) ; (turn == true => "schwarz" ist am Zug)
+	private int turnCount = 1;
 	
 	private JPanel playPanel;
 	private Field[][] playfield = new Field[FIELDSIZE][FIELDSIZE];
@@ -159,7 +160,7 @@ public class Board extends JFrame {
 	}
 	
 	public void startRunning() {
-		turnLabel.setText("Zug: \"schwarz\"");
+		turnLabel.setText("Zug " + turnCount + ": \"schwarz\"");
 		isRunning = true;
 	}
 	
@@ -187,16 +188,18 @@ public class Board extends JFrame {
 	
 	private void resetTurn() {
 		turn = true;
+		turnCount = 1;
 		turnLabel.setText("");
 	}
 	
 	protected void nextTurn() {
 		turn = !turn;
+		turnCount ++;
 		
 		if (turn) {
-			turnLabel.setText("Zug: \"schwarz\"");
+			turnLabel.setText("Zug " + turnCount + ": \"schwarz\"");
 		} else {
-			turnLabel.setText("Zug: \"weiﬂ\"");
+			turnLabel.setText("Zug " + turnCount + ": \"weiﬂ\"");
 		}
 	}
 	
