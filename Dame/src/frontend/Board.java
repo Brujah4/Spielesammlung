@@ -186,12 +186,6 @@ public class Board extends JFrame {
 		return turn;
 	}
 	
-	private void resetTurn() {
-		turn = true;
-		turnCount = 1;
-		turnLabel.setText("");
-	}
-	
 	protected void nextTurn() {
 		turn = !turn;
 		turnCount ++;
@@ -201,6 +195,12 @@ public class Board extends JFrame {
 		} else {
 			turnLabel.setText("Zug " + turnCount + ": \"weiﬂ\"");
 		}
+	}
+	
+	private void resetTurn() {
+		turn = true;
+		turnCount = 1;
+		turnLabel.setText("");
 	}
 	
 	public Field[][] getPlayfield() {
