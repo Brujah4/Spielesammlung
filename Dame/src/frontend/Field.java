@@ -47,18 +47,20 @@ public class Field extends JButton {
 		token = inputToken;
 		
 		if (token instanceof BasicToken) {
+			ImageIcon icon;
+			
 			if (token.isBlack()) {
-				ImageIcon icon = new ImageIcon(board.DRAUGHTSBLACK.getScaledInstance(getWidth(), getHeight(), Image.SCALE_FAST));
-				this.setIcon(icon);
+				icon = new ImageIcon(board.DRAUGHTSBLACK.getScaledInstance(getWidth(), getHeight(), Image.SCALE_FAST));
+				setIcon(icon);
 			} else {
-				ImageIcon icon = new ImageIcon(board.DRAUGHTSWHITE.getScaledInstance(getWidth(), getHeight(), Image.SCALE_FAST));
-				this.setIcon(icon);
+				icon = new ImageIcon(board.DRAUGHTSWHITE.getScaledInstance(getWidth(), getHeight(), Image.SCALE_FAST));
 			}
+			setIcon(icon);
 		}
 	}
 	
 	public void removeToken() {
-		reset();
+		flag();
 		board.moveStarted();
 	}
 	
@@ -69,6 +71,7 @@ public class Field extends JButton {
 				
 				if (value >= 0 && value <= 1) {
 					setToken(inputToken);
+					inputToken.getField().setIcon(null);
 					token.setField(this);
 					board.moveFinished();
 					
@@ -99,6 +102,24 @@ public class Field extends JButton {
 	
 	public int getPosColumn() {
 		return posColumn;
+	}
+	
+	private void flag() {
+		if (token instanceof BasicToken) {
+			ImageIcon icon;
+			
+			if (token.isBlack()) {
+				icon = new ImageIcon(board.DRAUGHTSBLACKFLAGGED.getScaledInstance(getWidth(), getHeight(), Image.SCALE_FAST));
+				setIcon(icon);
+			} else {
+				icon = new ImageIcon(board.DRAUGHTSWHITEFLAGGED.getScaledInstance(getWidth(), getHeight(), Image.SCALE_FAST));
+				setIcon(icon);
+			}
+			setIcon(icon);
+		} else {
+			setIcon(null);
+		}
+		token = null;
 	}
 	
 	public void reset() {
