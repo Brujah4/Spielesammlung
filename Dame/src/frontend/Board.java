@@ -267,13 +267,32 @@ public class Board extends JFrame {
 		public Token token = null;
 		
 		public void mouseClicked(MouseEvent click) {
+			mouseCickedOrPressed(click);
+		}
+		
+		public void mouseEntered(MouseEvent enter) {
 			
+		}
+		
+		public void mouseExited(MouseEvent exit) {
+			
+		}
+		
+		public void mousePressed(MouseEvent press) {
+			mouseCickedOrPressed(press);
+		}
+		
+		public void mouseReleased(MouseEvent release) {
+			
+		}
+		
+		private void mouseCickedOrPressed(MouseEvent event) {
 			Field field = null;
 			
-			if (click.getButton() == 1) {
+			if (event.getButton() == 1) {
 				for(int row=0 ; row<playfield.length ; row++) {
 					for(int column=0 ; column<playfield[row].length ; column++) {
-						if (click.getSource() == playfield[row][column]) {
+						if (event.getSource() == playfield[row][column]) {
 							field = playfield[row][column];
 							System.out.println("Klick auf Feld (" + field.getPosRow() + "," + field.getPosColumn() + ") !!");
 							row = playfield.length;
@@ -294,28 +313,12 @@ public class Board extends JFrame {
 						field.setTokenOnValidField(token);
 					}
 				}
-			} else if (click.getButton() == 3 || MouseInfo.getNumberOfButtons() == 2 && click.getButton() == 2) {
+			} else if (event.getButton() == 3 || MouseInfo.getNumberOfButtons() == 2 && event.getButton() == 2) {
 				if (isRunning() && !isMoveStart()) {
 					token.getField().setToken(token);
 					moveFinished();
 				}
 			}
-		}
-		
-		public void mouseEntered(MouseEvent enter) {
-			
-		}
-		
-		public void mouseExited(MouseEvent exit) {
-			
-		}
-		
-		public void mousePressed(MouseEvent press) {
-			
-		}
-		
-		public void mouseReleased(MouseEvent release) {
-			
 		}
 	}
 	
