@@ -200,6 +200,10 @@ public class Board extends JFrame {
 		}
 	}
 	
+	public Field[][] getPlayfield() {
+		return playfield;
+	}
+	
 	private void initPlayfield() {
 		Field field;
 		boolean isWhite;

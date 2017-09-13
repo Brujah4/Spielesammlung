@@ -65,11 +65,21 @@ public class Field extends JButton {
 	public void setTokenOnValidField(Token inputToken) {
 		switch (board.getGame()) {
 			case DRAUGHTS:
-				if (Rules.validDraughts(this, inputToken) == 0) {
+				int value = Rules.validDraughts(this, inputToken);
+				
+				if (value >= 0 && value <= 1) {
 					setToken(inputToken);
 					token.setField(this);
 					board.moveFinished();
-					board.nextTurn();
+					
+					if (value == 0) {
+						board.nextTurn();
+					} else if (value == 1) {
+						// ToDo:	Prüfe, ob weiter geschlagen werden kann,
+						//			wenn nein, dann nextTurn(),
+						//			wenn ja, dann MUSS weitergeschlagen werden.
+						board.nextTurn();
+					}
 				}
 				break;
 			case CHESS:
@@ -91,7 +101,7 @@ public class Field extends JButton {
 		return posColumn;
 	}
 	
-	protected void reset() {
+	public void reset() {
 		token = null;
 		setIcon(null);
 	}
