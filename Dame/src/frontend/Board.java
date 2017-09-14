@@ -35,10 +35,10 @@ public class Board extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private static final int FIELDSIZE = 8;
 	private static final Dimension PREFERREDSIZE = new Dimension(500, 500);
-	protected final Image DRAUGHTSBLACK = new ImageIcon(getClass().getResource("../images/draughts_black.jpg")).getImage();
-	protected final Image DRAUGHTSWHITE = new ImageIcon(getClass().getResource("../images/draughts_white.jpg")).getImage();
-	protected final Image DRAUGHTSBLACKFLAGGED = new ImageIcon(getClass().getResource("../images/draughts_black_flagged.jpg")).getImage();
-	protected final Image DRAUGHTSWHITEFLAGGED = new ImageIcon(getClass().getResource("../images/draughts_white_flagged.jpg")).getImage();
+	protected final Image DRAUGHTSBLACK = new ImageIcon(getClass().getResource("/images/draughts_black.jpg")).getImage();
+	protected final Image DRAUGHTSWHITE = new ImageIcon(getClass().getResource("/images/draughts_white.jpg")).getImage();
+	protected final Image DRAUGHTSBLACKFLAGGED = new ImageIcon(getClass().getResource("/images/draughts_black_flagged.jpg")).getImage();
+	protected final Image DRAUGHTSWHITEFLAGGED = new ImageIcon(getClass().getResource("/images/draughts_white_flagged.jpg")).getImage();
 	
 	private Game game = null;
 	private Colour colour = null;
