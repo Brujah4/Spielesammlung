@@ -38,29 +38,25 @@ public class Field extends JButton {
 		return token;
 	}
 	
-	public void setToken(Token inputToken) {
+	public void setToken(Token inputToken, boolean flagged) {
 		if (inputToken == null) {
 			System.out.println("FEHLER: Nullpointer Token gesetzt!");
 			return;
 		}
 		
 		token = inputToken;
-		
-		if (token instanceof BasicToken) {
-			ImageIcon icon;
-			
-			if (token.isBlack()) {
-				icon = new ImageIcon(board.DRAUGHTSBLACK.getScaledInstance(getWidth(), getHeight(), Image.SCALE_FAST));
-				setIcon(icon);
-			} else {
-				icon = new ImageIcon(board.DRAUGHTSWHITE.getScaledInstance(getWidth(), getHeight(), Image.SCALE_FAST));
-			}
-			setIcon(icon);
-		}
+		flag(flagged);
+	}
+	
+	public void removeTokenFlagged() {
+		flag(true);
+		token = null;
+		board.moveStarted();
 	}
 	
 	public void removeToken() {
-		flag();
+		token = null;
+		setIcon(null);
 		board.moveStarted();
 	}
 	
@@ -70,18 +66,31 @@ public class Field extends JButton {
 				int value = Rules.validDraughts(this, inputToken);
 				
 				if (value >= 0 && value <= 1) {
-					setToken(inputToken);
 					inputToken.getField().setIcon(null);
-					token.setField(this);
 					board.moveFinished();
 					
 					if (value == 0) {
+						setToken(inputToken, false);
+						token.setField(this);
 						board.nextTurn();
 					} else if (value == 1) {
-						// ToDo:	Prüfe, ob weiter geschlagen werden kann,
-						//			wenn nein, dann nextTurn(),
-						//			wenn ja, dann MUSS weitergeschlagen werden.
-						board.nextTurn();
+						int help = posRow - inputToken.getField().getPosRow();
+						int delRow = (help >= 0 ? help : -help);
+						help = posColumn - inputToken.getField().getPosColumn();
+						int delColumn = (help >= 0 ? help : -help);
+						
+						this.getBoard().getPlayfield()[delRow][delColumn].removeToken();
+						setToken(inputToken, false);
+						token.setField(this);
+						Rules.resetAllTargetFields(board);
+						Rules.setTargetFields(token);
+						
+						if (token.getCaptureTargets().isEmpty()) {
+							board.nextTurn();
+						} else {
+							flag(true);
+							token.resetUsualTargets();
+						}
 					}
 				}
 				break;
@@ -104,22 +113,27 @@ public class Field extends JButton {
 		return posColumn;
 	}
 	
-	private void flag() {
+	private void flag(boolean isFlagged) {
 		if (token instanceof BasicToken) {
 			ImageIcon icon;
 			
-			if (token.isBlack()) {
-				icon = new ImageIcon(board.DRAUGHTSBLACKFLAGGED.getScaledInstance(getWidth(), getHeight(), Image.SCALE_FAST));
-				setIcon(icon);
+			if (isFlagged) {
+				if (token.isBlack()) {
+					icon = new ImageIcon(board.DRAUGHTSBLACKFLAGGED.getScaledInstance(getWidth(), getHeight(), Image.SCALE_FAST));
+				} else {
+					icon = new ImageIcon(board.DRAUGHTSWHITEFLAGGED.getScaledInstance(getWidth(), getHeight(), Image.SCALE_FAST));
+				}
 			} else {
-				icon = new ImageIcon(board.DRAUGHTSWHITEFLAGGED.getScaledInstance(getWidth(), getHeight(), Image.SCALE_FAST));
-				setIcon(icon);
+				if (token.isBlack()) {
+					icon = new ImageIcon(board.DRAUGHTSBLACK.getScaledInstance(getWidth(), getHeight(), Image.SCALE_FAST));
+				} else {
+					icon = new ImageIcon(board.DRAUGHTSWHITE.getScaledInstance(getWidth(), getHeight(), Image.SCALE_FAST));
+				}
 			}
 			setIcon(icon);
 		} else {
 			setIcon(null);
 		}
-		token = null;
 	}
 	
 	public void reset() {

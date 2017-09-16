@@ -20,6 +20,7 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 
 import backend.BasicToken;
+import backend.Rules;
 import backend.Token;
 
 public class Board extends JFrame {
@@ -42,6 +43,7 @@ public class Board extends JFrame {
 	
 	private Game game = null;
 	private Colour colour = null;
+	private boolean whiteDown;
 	private boolean isRunning = false;
 	private boolean moveStart = true;
 	private boolean turn = true; // (turn == false => "weiß" ist am Zug) ; (turn == true => "schwarz" ist am Zug)
@@ -155,6 +157,16 @@ public class Board extends JFrame {
 	
 	private void setColour(Colour colour) {
 		this.colour = colour;
+		
+		if (colour.equals(Colour.WHITE)) {
+			whiteDown = true;
+		} else if (colour.equals(Colour.BLACK)) {
+			whiteDown = false;
+		}
+	}
+	
+	public boolean isWhiteDown() {
+		return whiteDown;
 	}
 	
 	public boolean isRunning() {
@@ -191,6 +203,7 @@ public class Board extends JFrame {
 	protected void nextTurn() {
 		turn = !turn;
 		turnCount ++;
+		Rules.setAllTargetFields(this);
 		
 		if (turn) {
 			turnLabel.setText("Zug " + turnCount + ": \"schwarz\"");
@@ -211,17 +224,10 @@ public class Board extends JFrame {
 	
 	private void initPlayfield() {
 		Field field;
-		boolean isWhite;
 		
 		if (game == null || colour == null) {
 			System.out.println("Bitte erst alle Optionen auswählen.");
 			return;
-		}
-		
-		if (colour == Colour.WHITE) {
-			isWhite = true;
-		} else {
-			isWhite = false;
 		}
 		
 		finishPlayfield();
@@ -233,7 +239,7 @@ public class Board extends JFrame {
 						field = playfield[row][column];
 						
 						if (field.isBlack()) {
-							field.setToken(new BasicToken(field, isWhite));
+							field.setToken(new BasicToken(field, whiteDown), false);
 						}
 					}
 				}
@@ -243,10 +249,11 @@ public class Board extends JFrame {
 						field = playfield[row][column];
 						
 						if (field.isBlack()) {
-							field.setToken(new BasicToken(field, !isWhite));
+							field.setToken(new BasicToken(field, !whiteDown), false);
 						}
 					}
 				}
+				Rules.setAllTargetFields(this);
 				startRunning();
 				break;
 			
@@ -303,7 +310,7 @@ public class Board extends JFrame {
 						if (field.getToken() != null) {
 							token = field.getToken();
 							if (token.isBlack() == turn) {
-								field.removeToken();
+								field.removeTokenFlagged();
 							}
 						}
 					} else {
@@ -312,7 +319,7 @@ public class Board extends JFrame {
 				}
 			} else if (press.getButton() == 3 || MouseInfo.getNumberOfButtons() == 2 && press.getButton() == 2) {
 				if (isRunning() && !isMoveStart()) {
-					token.getField().setToken(token);
+					token.getField().setToken(token, false);
 					moveFinished();
 				}
 			}
