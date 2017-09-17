@@ -100,9 +100,8 @@ public class Field extends JButton {
 						if (token.getCaptureTargets().isEmpty()) {
 							board.nextTurn();
 						} else {
-							flag(true);
 							token.resetUsualTargets();
-							board.moveStarted();
+							removeTokenFlagged();
 						}
 					}
 				}

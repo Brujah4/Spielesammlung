@@ -298,7 +298,18 @@ public class Board extends JFrame {
 					for(int column=0 ; column<playfield[row].length ; column++) {
 						if (press.getSource() == playfield[row][column]) {
 							field = playfield[row][column];
-							System.out.println("Klick auf Feld (" + field.getPosRow() + "," + field.getPosColumn() + ") !!");
+							// debug
+							System.out.print("Klick auf Feld (" + field.getPosRow() + "," + field.getPosColumn() + ") !! ");
+							if (field.getToken() != null) {
+								if (field.getToken().isBlack()) {
+									System.out.println("schwarz");
+								} else {
+									System.out.println("weiß");
+								}
+							} else {
+								System.out.println("null");
+							}
+							// end debug
 							row = playfield.length;
 							break;
 						}
