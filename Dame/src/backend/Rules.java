@@ -22,17 +22,30 @@ public class Rules {
 		if (field.getToken() == null && token.getField() != field) {
 			LinkedList<Field> usualTargets = token.getUsualTargets();
 			LinkedList<Field> captureTargets = token.getCaptureTargets();
+			Field[][] playfield = field.getBoard().getPlayfield();
+			boolean isAllowed = true;
 			
-			if (captureTargets.isEmpty()) {
+			for(int i=0 ; i<captureTargets.size() ; i++) {
+				if (field == captureTargets.get(i)) {
+					return 1;
+				}
+			}
+			
+			for(int row=0; row<playfield.length ; row++) {
+				for(int column=0 ; column<playfield[row].length ; column++) {
+					if (playfield[row][column].getToken() != null
+							&& !playfield[row][column].getToken().getCaptureTargets().isEmpty()) {
+						isAllowed = false;
+						row = playfield.length;
+						break;
+					}
+				}
+			}
+			if (isAllowed) {
 				for(int i=0 ; i<usualTargets.size() ; i++) {
 					if (field == usualTargets.get(i)) {
 						return 0;
 					}
-				}
-			}
-			for(int i=0 ; i<captureTargets.size() ; i++) {
-				if (field == captureTargets.get(i)) {
-					return 1;
 				}
 			}
 			return -1;
@@ -49,7 +62,7 @@ public class Rules {
 		Field[][] playfield = token.getField().getBoard().getPlayfield();
 		int row = token.getField().getPosRow();
 		int column = token.getField().getPosColumn();
-		int value = 0;
+		int value;
 		
 		if (token.getField().getBoard().isWhiteDown() == token.isBlack()) {
 			value = 1;
@@ -93,6 +106,7 @@ public class Rules {
 		}
 	}
 	
+	// unnötig !!
 	public static void resetAllTargetFields(Board board) {
 		Field[][] playfield = board.getPlayfield();
 		

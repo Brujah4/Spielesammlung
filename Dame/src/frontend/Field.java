@@ -60,6 +60,7 @@ public class Field extends JButton {
 		board.moveStarted();
 	}
 	
+	// überarbeiten !!
 	public void setTokenOnValidField(Token inputToken) {
 		switch (board.getGame()) {
 			case DRAUGHTS:
@@ -74,15 +75,26 @@ public class Field extends JButton {
 						token.setField(this);
 						board.nextTurn();
 					} else if (value == 1) {
-						int help = posRow - inputToken.getField().getPosRow();
-						int delRow = (help >= 0 ? help : -help);
-						help = posColumn - inputToken.getField().getPosColumn();
-						int delColumn = (help >= 0 ? help : -help);
+						int help = inputToken.getField().getPosRow();
+						int delRow;
+						int delColumn;
 						
-						this.getBoard().getPlayfield()[delRow][delColumn].removeToken();
+						if (posRow > help) {
+							delRow = posRow - 1;
+						} else {
+							delRow = posRow + 1;
+						}
+						help = inputToken.getField().getPosColumn();
+						if (posColumn > help) {
+							delColumn = posColumn - 1;
+						} else {
+							delColumn = posColumn + 1;
+						}
+						
+						board.getPlayfield()[delRow][delColumn].removeToken();
+						board.moveFinished();
 						setToken(inputToken, false);
 						token.setField(this);
-						Rules.resetAllTargetFields(board);
 						Rules.setTargetFields(token);
 						
 						if (token.getCaptureTargets().isEmpty()) {
@@ -90,6 +102,7 @@ public class Field extends JButton {
 						} else {
 							flag(true);
 							token.resetUsualTargets();
+							board.moveStarted();
 						}
 					}
 				}
