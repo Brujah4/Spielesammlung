@@ -34,6 +34,7 @@ public class Rules {
 			for(int row=0; row<playfield.length ; row++) {
 				for(int column=0 ; column<playfield[row].length ; column++) {
 					if (playfield[row][column].getToken() != null
+							&& playfield[row][column].getToken().isBlack() == token.isBlack()
 							&& !playfield[row][column].getToken().getCaptureTargets().isEmpty()) {
 						isAllowed = false;
 						row = playfield.length;
